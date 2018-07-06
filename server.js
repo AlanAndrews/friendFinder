@@ -5,6 +5,8 @@ var path = require("path");
 
 var app = express();
 require("./app/routing/htmlRoutes")(app);
+// app.use('/', require('./app/routing/htmlRoutes'));
+
 
 
 // var PORT = process.env.PORT || 3306;
