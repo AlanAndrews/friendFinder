@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <title>Survey</title>
 </head>
 <body>
@@ -22,7 +23,7 @@
                   <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div class="form-group">
-                  <label for="Input">Insert image URL</label>
+                  <label for="Input">Insert Image URL</label>
                   <input type="url" class="form-control" id="exampleInputPassword1" placeholder="Password">
                 </div>
                 <div class="form-check">
@@ -156,8 +157,67 @@
                     <option value="5">5(Strongly Agree)</option>
                   </select>
                
-                                   
+                  <br>
+
+                  <button type ="submit" class="cyan lighten-1" id="submitBtn">Submit</button>
+                                    
                 </div>
+
+                               
             </div>
+
+            <script type="text/javascript">
+              $(document).ready(function() {
+                  $("#submitBtn").on("click", function() {
+                      //form validation
+                      function validateForm() {
+                          var isValid = true;
+                          $('.validate').each(function() {
+                              if ($(this).val() === ''){
+                                  isValid = false;
+                              }
+                          });
+                          $('.browser-default').each(function() {
+                              if ($(this).val() === ""){
+                                  isValid = false;
+                              }
+                          });
+                          return isValid;
+                      }
+                      //if everything is filled
+                      if (validateForm() == true) {
+                          //creates a new friend from the values submitted
+                          var newFriend = {
+                              name: $('#name').val(),
+                              profilePic: $('#photo').val(),
+                              scores: [
+                                  $('#quest1').val(),
+                                  $('#quest2').val(),
+                                  $('#quest3').val(),
+                                  $('#quest4').val(),
+                                  $('#quest5').val(),
+                                  $('#quest6').val(),
+                                  $('#quest7').val(),
+                                  $('#quest8').val(),
+                                  $('#quest9').val(),
+                                  $('#quest10').val(),
+                              ]
+                          };
+                          //Grabs current URL of website
+                          var currentURL = window.location.origin;
+                          //AJAX posts the data to friends API.
+                          $.post(currentURL + "/app/data/friends.js", newFriend, function(data) {
+                              //Grab the result from the AJAX post so that the best match's name and photo are displayed.
+                              $("#matchName").text(data.name);
+                              $("#matchPic").attr("src", data.profilePic);
+                          });
+                          
+                      } else {
+                          alert("Please fill out ALL fields before submitting survey!")
+                      }
+                      // return false;
+                  });
+              });
+              </script>
 </body>
 </html>
